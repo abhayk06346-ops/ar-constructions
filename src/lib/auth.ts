@@ -23,15 +23,18 @@ export async function login(user: any) {
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const session = await encrypt({ user, expires });
 
-  cookies().set('session', session, { expires, httpOnly: true, path: '/' });
+  const cookieStore = await cookies();
+  cookieStore.set('session', session, { expires, httpOnly: true, path: '/' });
 }
 
 export async function logout() {
-  cookies().set('session', '', { expires: new Date(0), httpOnly: true, path: '/' });
+  const cookieStore = await cookies();
+  cookieStore.set('session', '', { expires: new Date(0), httpOnly: true, path: '/' });
 }
 
 export async function getSession() {
-  const session = cookies().get('session')?.value;
+  const cookieStore = await cookies();
+  const session = cookieStore.get('session')?.value;
   if (!session) return null;
   return await decrypt(session);
 }
