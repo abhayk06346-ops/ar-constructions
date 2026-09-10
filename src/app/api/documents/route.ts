@@ -29,11 +29,15 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    
+    // Ensure empty string is converted to null for foreign key constraints
+    const validProjectId = body.projectId && body.projectId.trim() !== '' ? body.projectId : null;
+
     const document = await prisma.document.create({
       data: {
         name: body.name,
         category: body.category,
-        projectId: body.projectId || null,
+        projectId: validProjectId,
         filePath: body.filePath,
         fileSize: body.fileSize || null,
         fileType: body.fileType || null,

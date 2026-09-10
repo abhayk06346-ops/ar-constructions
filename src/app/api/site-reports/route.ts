@@ -36,8 +36,23 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const item = await prisma.dailyReport.create({
-      data: {
+    
+    // Use upsert to update existing report for the day or create a new one
+    const item = await prisma.dailyReport.upsert({
+      where: {
+        projectId_date: {
+          projectId: body.projectId,
+          date: body.date,
+        }
+      },
+      update: {
+        weather: body.weather,
+        workDone: body.workDone,
+        labourCount: Number(body.labourCount) || 0,
+        materialsUsed: body.materialsUsed,
+        issues: body.issues,
+      },
+      create: {
         projectId: body.projectId,
         date: body.date,
         weather: body.weather,

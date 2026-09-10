@@ -150,6 +150,12 @@ export default function ProjectDetailPage() {
         <div className="flex gap-2">
           <Badge variant={getStatusColor(project.status) as any}>{project.status}</Badge>
           <Button variant="secondary" onClick={() => setIsEditProjectOpen(true)}>Edit</Button>
+          <Button variant="danger" onClick={async () => {
+            if (window.confirm('Are you sure you want to delete this project? This cannot be undone.')) {
+              await fetch(`/api/projects/${project.id}`, { method: 'DELETE' });
+              router.push('/projects');
+            }
+          }}>Delete</Button>
         </div>
       </div>
 

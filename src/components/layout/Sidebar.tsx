@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { href: "/", label: "Dashboard", icon: "📊" },
+  { href: "/dashboard", label: "Dashboard", icon: "📊" },
   { href: "/projects", label: "Projects", icon: "📁" },
   { href: "/inventory", label: "Inventory", icon: "📦" },
   { href: "/finance", label: "Finance", icon: "💰" },
@@ -22,7 +22,7 @@ export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
+    if (href === "/dashboard") return pathname === "/dashboard" || pathname === "/";
     return pathname.startsWith(href);
   };
 
