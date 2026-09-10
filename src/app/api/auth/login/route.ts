@@ -32,8 +32,8 @@ export async function POST(request: NextRequest) {
 
     await login({ id: user.id, username: user.username, role: user.role });
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Login error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Unknown Internal server error' }, { status: 500 });
   }
 }
