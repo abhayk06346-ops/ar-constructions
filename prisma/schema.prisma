@@ -1,0 +1,408 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// ==================== PROJECTS ====================
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  role      String   @default("USER") // ADMIN, USER
+  createdAt DateTime @default(now())
+}
+
+model Project {
+  id              String   @id @default(cuid())
+  name            String
+  clientId        String?
+  client          Client?  @relation(fields: [clientId], references: [id])
+  location        String
+  projectType     String   @default("residential") // residential, commercial, infrastructure
+  status          String   @default("planning") // planning, in_progress, on_hold, completed, cancelled
+  reraNumber      String?
+  startDate       String
+  expectedEndDate String
+  revisedEndDate  String?
+  estimatedBudget Int      @default(0) // in paise
+  revisedBudget   Int?     // in paise
+  description     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  phases       ProjectPhase[]
+  changeOrders ChangeOrder[]
+  delayLogs    DelayLog[]
+  transactions Transaction[]
+  invoices     Invoice[]
+  workers      WorkerAssignment[]
+  attendances  Attendance[]
+  stockTransactions StockTransaction[]
+  dailyReports DailyReport[]
+  sitePhotos   SitePhoto[]
+  documents    Document[]
+  equipmentAssignments EquipmentAssignment[]
+  purchaseOrders PurchaseOrder[]
+}
+
+model ProjectPhase {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name        String
+  sortOrder   Int      @default(0)
+  status      String   @default("pending") // pending, in_progress, completed
+  startDate   String?
+  endDate     String?
+  progress    Int      @default(0) // 0-100
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ChangeOrder {
+  id                String   @id @default(cuid())
+  projectId         String
+  project           Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title             String
+  description       String
+  reason            String
+  additionalCost    Int      @default(0) // in paise
+  actualCost        Int?     // in paise
+  additionalDays    Int      @default(0)
+  status            String   @default("pending") // pending, approved, rejected
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model DelayLog {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  startDate   String
+  endDate     String
+  daysLost    Int
+  reason      String   // weather, material_shortage, labour_shortage, payment_pending, permit_pending, design_change, other
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+// ==================== INVENTORY & MATERIALS ====================
+
+model Material {
+  id              String   @id @default(cuid())
+  name            String
+  category        String   // cement, sand, aggregate, steel, bricks, tiles, paint, pipes, electrical, wood, other
+  unit            String   // bags, brass, cft, kg, ton, sqft, boxes, litres, metres, numbers
+  currentStock    Float    @default(0)
+  minimumStock    Float    @default(0)
+  lastPrice       Int      @default(0) // in paise per unit
+  hsnCode         String?
+  gstRate         Float    @default(18)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  stockTransactions StockTransaction[]
+  purchaseOrderItems PurchaseOrderItem[]
+}
+
+model StockTransaction {
+  id          String   @id @default(cuid())
+  materialId  String
+  material    Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+  type        String   // stock_in, stock_out
+  quantity    Float
+  pricePerUnit Int     @default(0) // in paise
+  totalAmount Int      @default(0) // in paise
+  vendorId    String?
+  vendor      Vendor?  @relation(fields: [vendorId], references: [id])
+  notes       String?
+  date        String
+  createdAt   DateTime @default(now())
+}
+
+// ==================== FINANCIAL ====================
+
+model Transaction {
+  id          String   @id @default(cuid())
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+  type        String   // income, expense
+  category    String   // material, labour, equipment, transport, overheads, petty_cash, gst, client_payment, advance, other
+  amount      Int      // in paise
+  gstAmount   Int      @default(0) // in paise
+  description String
+  paymentMode String   @default("cash") // cash, upi, bank_transfer, cheque
+  reference   String?  // cheque number, UPI ref, etc.
+  date        String
+  vendorId    String?
+  vendor      Vendor?  @relation(fields: [vendorId], references: [id])
+  clientId    String?
+  client      Client?  @relation(fields: [clientId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Invoice {
+  id            String   @id @default(cuid())
+  invoiceNumber String   @unique
+  projectId     String?
+  project       Project? @relation(fields: [projectId], references: [id])
+  clientId      String
+  client        Client   @relation(fields: [clientId], references: [id])
+  subtotal      Int      @default(0) // in paise
+  gstAmount     Int      @default(0) // in paise
+  totalAmount   Int      @default(0) // in paise
+  gstRate       Float    @default(18)
+  status        String   @default("draft") // draft, sent, paid, overdue, cancelled
+  issueDate     String
+  dueDate       String
+  paidDate      String?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  items InvoiceItem[]
+}
+
+model InvoiceItem {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  quantity    Float   @default(1)
+  unit        String  @default("nos")
+  rate        Int     @default(0) // in paise
+  amount      Int     @default(0) // in paise
+  hsnCode     String?
+}
+
+// ==================== LABOUR & WORKFORCE ====================
+
+model Worker {
+  id          String   @id @default(cuid())
+  name        String
+  phone       String?
+  aadhaarLast4 String? // only last 4 digits for privacy
+  skillType   String   // mason, carpenter, plumber, electrician, painter, helper, supervisor, other
+  dailyWage   Int      @default(0) // in paise
+  status      String   @default("active") // active, inactive
+  contractorId String?
+  contractor  Contractor? @relation(fields: [contractorId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  assignments  WorkerAssignment[]
+  attendances  Attendance[]
+  wagePayments WagePayment[]
+}
+
+model Contractor {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String?
+  gstNumber String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workers Worker[]
+}
+
+model WorkerAssignment {
+  id        String   @id @default(cuid())
+  workerId  String
+  worker    Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  startDate String
+  endDate   String?
+  status    String   @default("active") // active, completed
+  createdAt DateTime @default(now())
+
+  @@unique([workerId, projectId])
+}
+
+model Attendance {
+  id        String   @id @default(cuid())
+  workerId  String
+  worker    Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  date      String
+  status    String   // present, half_day, absent, overtime
+  overtimeHours Float @default(0)
+  notes     String?
+  createdAt DateTime @default(now())
+
+  @@unique([workerId, date])
+}
+
+model WagePayment {
+  id          String   @id @default(cuid())
+  workerId    String
+  worker      Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  amount      Int      // in paise
+  paymentMode String   @default("cash") // cash, upi, bank_transfer
+  reference   String?
+  periodFrom  String
+  periodTo    String
+  notes       String?
+  date        String
+  createdAt   DateTime @default(now())
+}
+
+// ==================== VENDORS ====================
+
+model Vendor {
+  id          String   @id @default(cuid())
+  name        String
+  phone       String?
+  email       String?
+  gstNumber   String?
+  address     String?
+  bankName    String?
+  accountNumber String?
+  ifscCode    String?
+  materials   String?  // comma-separated material categories they supply
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  stockTransactions StockTransaction[]
+  transactions      Transaction[]
+  purchaseOrders    PurchaseOrder[]
+}
+
+model PurchaseOrder {
+  id          String   @id @default(cuid())
+  poNumber    String   @unique
+  vendorId    String
+  vendor      Vendor   @relation(fields: [vendorId], references: [id])
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+  totalAmount Int      @default(0) // in paise
+  gstAmount   Int      @default(0) // in paise
+  status      String   @default("draft") // draft, sent, partial, delivered, cancelled
+  orderDate   String
+  deliveryDate String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items PurchaseOrderItem[]
+}
+
+model PurchaseOrderItem {
+  id              String   @id @default(cuid())
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  materialId      String
+  material        Material @relation(fields: [materialId], references: [id])
+  quantity        Float
+  pricePerUnit    Int      @default(0) // in paise
+  amount          Int      @default(0) // in paise
+}
+
+// ==================== CLIENTS ====================
+
+model Client {
+  id          String   @id @default(cuid())
+  name        String
+  phone       String?
+  email       String?
+  gstNumber   String?
+  address     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  projects     Project[]
+  transactions Transaction[]
+  invoices     Invoice[]
+}
+
+// ==================== EQUIPMENT ====================
+
+model Equipment {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   @default("owned") // owned, rented
+  category    String   // excavator, crane, mixer, compactor, scaffolding, pump, generator, truck, other
+  vendorId    String?  // rental vendor
+  dailyRate   Int      @default(0) // in paise (rental rate)
+  status      String   @default("available") // available, in_use, maintenance, retired
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  assignments EquipmentAssignment[]
+}
+
+model EquipmentAssignment {
+  id          String    @id @default(cuid())
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  projectId   String
+  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  startDate   String
+  endDate     String?
+  totalDays   Int?
+  totalCost   Int?      // in paise
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// ==================== DOCUMENTS ====================
+
+model Document {
+  id        String   @id @default(cuid())
+  name      String
+  category  String   // contract, permit, drawing, bill, quotation, approval, other
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id])
+  filePath  String
+  fileSize  Int?
+  fileType  String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ==================== SITE REPORTS ====================
+
+model DailyReport {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  date        String
+  weather     String   @default("clear") // clear, cloudy, rainy, hot, cold
+  workDone    String
+  labourCount Int      @default(0)
+  materialsUsed String?
+  issues      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([projectId, date])
+}
+
+model SitePhoto {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  filePath  String
+  caption   String?
+  tags      String?  // comma-separated tags
+  date      String
+  createdAt DateTime @default(now())
+}
