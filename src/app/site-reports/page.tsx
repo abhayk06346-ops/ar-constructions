@@ -118,7 +118,7 @@ export default function SiteReportsPage() {
         });
       } else {
         const errorData = await res.json();
-        alert(`Failed to save report. Make sure a report for this date doesn't already exist!`);
+        alert(`Failed to save report: ${errorData.error}`);
       }
     } catch (error) {
       console.error('Failed to save report', error);
