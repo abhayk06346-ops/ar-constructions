@@ -401,14 +401,14 @@ export default function SiteReportsPage() {
               value={reportForm.projectId}
               onChange={(e) => setReportForm({ ...reportForm, projectId: e.target.value })}
               options={projectOptions}
-              required
+             
             />
             <Input
               label="Date"
               type="date"
               value={reportForm.date}
               onChange={(e) => setReportForm({ ...reportForm, date: e.target.value })}
-              required
+             
             />
           </div>
           
@@ -433,7 +433,7 @@ export default function SiteReportsPage() {
             onChange={(e) => setReportForm({ ...reportForm, workDone: e.target.value })}
             placeholder="Describe the work completed today..."
             rows={3}
-            required
+           
           />
 
           <TextArea
@@ -467,7 +467,7 @@ export default function SiteReportsPage() {
             value={photoForm.projectId}
             onChange={(e) => setPhotoForm({ ...photoForm, projectId: e.target.value })}
             options={projectOptions}
-            required
+           
           />
           
           <Input
@@ -475,7 +475,7 @@ export default function SiteReportsPage() {
             type="date"
             value={photoForm.date}
             onChange={(e) => setPhotoForm({ ...photoForm, date: e.target.value })}
-            required
+           
           />
 
           <div>
@@ -486,7 +486,7 @@ export default function SiteReportsPage() {
               onChange={handleFileChange}
               ref={fileInputRef}
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              required
+             
             />
           </div>
 

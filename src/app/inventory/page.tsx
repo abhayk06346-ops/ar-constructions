@@ -361,7 +361,7 @@ export default function InventoryPage() {
         title={selectedMaterial ? "Edit Material" : "Add New Material"}
       >
         <form onSubmit={handleMaterialSubmit} className="space-y-4">
-          <Input label="Material Name" value={materialForm.name} onChange={(e) => setMaterialForm({...materialForm, name: e.target.value})} required />
+          <Input label="Material Name" value={materialForm.name} onChange={(e) => setMaterialForm({...materialForm, name: e.target.value})} />
           <div className="grid grid-cols-2 gap-4">
             <Select 
               label="Category" 
@@ -375,13 +375,13 @@ export default function InventoryPage() {
                 { value: "bricks", label: "Bricks & Blocks" },
               ]}
             />
-            <Input label="Unit (e.g. kg, bags, tons)" value={materialForm.unit} onChange={(e) => setMaterialForm({...materialForm, unit: e.target.value})} required />
+            <Input label="Unit (e.g. kg, bags, tons)" value={materialForm.unit} onChange={(e) => setMaterialForm({...materialForm, unit: e.target.value})} />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Input label="Current Stock" type="number" value={materialForm.currentStock.toString()} onChange={(e) => setMaterialForm({...materialForm, currentStock: Number(e.target.value)})} required />
-            <Input label="Minimum Stock" type="number" value={materialForm.minimumStock.toString()} onChange={(e) => setMaterialForm({...materialForm, minimumStock: Number(e.target.value)})} required />
+            <Input label="Current Stock" type="number" value={materialForm.currentStock.toString()} onChange={(e) => setMaterialForm({...materialForm, currentStock: Number(e.target.value)})} />
+            <Input label="Minimum Stock" type="number" value={materialForm.minimumStock.toString()} onChange={(e) => setMaterialForm({...materialForm, minimumStock: Number(e.target.value)})} />
           </div>
-          <Input label="Price per Unit (₹)" type="number" value={materialForm.lastPrice.toString()} onChange={(e) => setMaterialForm({...materialForm, lastPrice: Number(e.target.value)})} required />
+          <Input label="Price per Unit (₹)" type="number" value={materialForm.lastPrice.toString()} onChange={(e) => setMaterialForm({...materialForm, lastPrice: Number(e.target.value)})} />
           <div className="flex justify-end gap-2 pt-4">
             <Button type="button" variant="secondary" onClick={() => setIsMaterialModalOpen(false)}>Cancel</Button>
             <Button type="submit">Save</Button>
@@ -409,13 +409,13 @@ export default function InventoryPage() {
               });
             }}
             options={materials.map(m => ({ value: m.id, label: `${m.name} (${m.currentStock} ${m.unit} available)` }))}
-            required
+           
           />
           <div className="grid grid-cols-2 gap-4">
-            <Input label="Quantity" type="number" value={transactionForm.quantity.toString()} onChange={(e) => setTransactionForm({...transactionForm, quantity: Number(e.target.value)})} required />
-            <Input label="Price per Unit (₹)" type="number" value={transactionForm.pricePerUnit.toString()} onChange={(e) => setTransactionForm({...transactionForm, pricePerUnit: Number(e.target.value)})} required />
+            <Input label="Quantity" type="number" value={transactionForm.quantity.toString()} onChange={(e) => setTransactionForm({...transactionForm, quantity: Number(e.target.value)})} />
+            <Input label="Price per Unit (₹)" type="number" value={transactionForm.pricePerUnit.toString()} onChange={(e) => setTransactionForm({...transactionForm, pricePerUnit: Number(e.target.value)})} />
           </div>
-          <Input label="Date" type="date" value={transactionForm.date} onChange={(e) => setTransactionForm({...transactionForm, date: e.target.value})} required />
+          <Input label="Date" type="date" value={transactionForm.date} onChange={(e) => setTransactionForm({...transactionForm, date: e.target.value})} />
           
           <Select
             label="Project (Optional)"

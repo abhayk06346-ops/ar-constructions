@@ -48,12 +48,11 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   try {
-    // Soft delete by setting status to inactive
-    const item = await prisma.worker.update({
-      where: { id },
-      data: { status: 'inactive' }
+    // Hard delete worker and cascade relations
+    await prisma.worker.delete({
+      where: { id }
     });
-    return NextResponse.json({ success: true, item });
+    return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to delete worker' }, { status: 500 });
   }

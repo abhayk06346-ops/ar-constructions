@@ -293,7 +293,7 @@ export default function EquipmentPage() {
             label="Name" 
             value={formData.name} 
             onChange={(e) => setFormData({...formData, name: e.target.value})} 
-            required 
+            
           />
           <Select 
             label="Category" 
@@ -310,7 +310,7 @@ export default function EquipmentPage() {
               { value: 'truck', label: 'Truck/Dumper' },
               { value: 'other', label: 'Other' },
             ]}
-            required
+           
           />
           <Select 
             label="Type" 
@@ -320,14 +320,14 @@ export default function EquipmentPage() {
               { value: 'owned', label: 'Owned' },
               { value: 'rented', label: 'Rented' },
             ]}
-            required
+           
           />
           <Input 
             label="Daily Rate (₹)" 
             type="number"
             value={formData.dailyRate} 
             onChange={(e) => setFormData({...formData, dailyRate: Number(e.target.value)})} 
-            required 
+            
           />
           <Select 
             label="Status" 
@@ -339,7 +339,7 @@ export default function EquipmentPage() {
               { value: 'maintenance', label: 'Maintenance' },
               { value: 'retired', label: 'Retired' },
             ]}
-            required
+           
           />
           <div className="flex justify-end space-x-2 pt-4">
             <Button type="button" variant="secondary" onClick={() => setIsModalOpen(false)}>Cancel</Button>
@@ -360,14 +360,14 @@ export default function EquipmentPage() {
             value={assignFormData.projectId} 
             onChange={(e) => setAssignFormData({...assignFormData, projectId: e.target.value})} 
             options={projects.map(p => ({ value: p.id, label: p.name }))}
-            required
+           
           />
           <Input 
             label="Start Date" 
             type="date"
             value={assignFormData.startDate} 
             onChange={(e) => setAssignFormData({...assignFormData, startDate: e.target.value})} 
-            required 
+            
           />
           <Input 
             label="Notes" 
@@ -397,7 +397,7 @@ export default function EquipmentPage() {
             type="date"
             value={returnEndDate} 
             onChange={(e) => setReturnEndDate(e.target.value)} 
-            required 
+            
           />
           <div className="flex justify-end space-x-2 pt-4">
             <Button type="button" variant="secondary" onClick={() => setIsReturnModalOpen(false)}>Cancel</Button>

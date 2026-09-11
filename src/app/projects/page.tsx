@@ -151,29 +151,29 @@ export default function ProjectsPage() {
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Create New Project" size="md">
         <form onSubmit={handleCreateProject} className="space-y-4">
-          <Input label="Project Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
-          <Input label="Location" value={formData.location} onChange={(e) => setFormData({...formData, location: e.target.value})} required />
+          <Input label="Project Name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
+          <Input label="Location" value={formData.location} onChange={(e) => setFormData({...formData, location: e.target.value})} />
           <div className="grid grid-cols-2 gap-4">
             <Select label="Project Type" value={formData.projectType} onChange={(e) => setFormData({...formData, projectType: e.target.value})} options={[
               { value: 'residential', label: 'Residential' },
               { value: 'commercial', label: 'Commercial' },
               { value: 'industrial', label: 'Industrial' },
-            ]} required />
+            ]} />
             <Select label="Client" value={formData.clientId} onChange={(e) => setFormData({...formData, clientId: e.target.value})} options={[
               { value: '', label: 'Select Client' },
               ...clients.map(c => ({ value: c.id, label: c.name }))
-            ]} required />
+            ]} />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Input label="Estimated Budget (₹)" type="number" value={formData.estimatedBudget} onChange={(e) => setFormData({...formData, estimatedBudget: e.target.value})} required />
+            <Input label="Estimated Budget (₹)" type="number" value={formData.estimatedBudget} onChange={(e) => setFormData({...formData, estimatedBudget: e.target.value})} />
             <Select label="Status" value={formData.status} onChange={(e) => setFormData({...formData, status: e.target.value})} options={[
               { value: 'planning', label: 'Planning' },
               { value: 'in_progress', label: 'In Progress' },
-            ]} required />
+            ]} />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Input label="Start Date" type="date" value={formData.startDate} onChange={(e) => setFormData({...formData, startDate: e.target.value})} required />
-            <Input label="Expected End Date" type="date" value={formData.expectedEndDate} onChange={(e) => setFormData({...formData, expectedEndDate: e.target.value})} required />
+            <Input label="Start Date" type="date" value={formData.startDate} onChange={(e) => setFormData({...formData, startDate: e.target.value})} />
+            <Input label="Expected End Date" type="date" value={formData.expectedEndDate} onChange={(e) => setFormData({...formData, expectedEndDate: e.target.value})} />
           </div>
           <div className="flex justify-end gap-3 mt-6">
             <Button variant="secondary" onClick={() => setIsModalOpen(false)} type="button">Cancel</Button>

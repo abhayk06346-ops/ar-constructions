@@ -196,14 +196,14 @@ function WorkersTab() {
         title={editingWorker ? "Edit Worker" : "Add Worker"}
       >
         <div className="space-y-4">
-          <Input label="Name" value={name} onChange={e => setName(e.target.value)} required />
+          <Input label="Name" value={name} onChange={e => setName(e.target.value)} />
           <div className="grid grid-cols-2 gap-4">
             <Input label="Phone" value={phone} onChange={e => setPhone(e.target.value)} />
             <Input label="Aadhaar (Last 4)" value={aadhaarLast4} onChange={e => setAadhaarLast4(e.target.value)} />
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Select label="Skill Type" value={skillType} onChange={e => setSkillType(e.target.value)} options={skillTypes} required />
-            <Input label="Daily Wage (₹)" type="number" value={dailyWage} onChange={e => setDailyWage(e.target.value)} required />
+            <Select label="Skill Type" value={skillType} onChange={e => setSkillType(e.target.value)} options={skillTypes} />
+            <Input label="Daily Wage (₹)" type="number" value={dailyWage} onChange={e => setDailyWage(e.target.value)} />
           </div>
           <Select label="Contractor" value={contractorId} onChange={e => setContractorId(e.target.value)} options={contractorOptions} />
           <Select label="Status" value={status} onChange={e => setStatus(e.target.value)} options={[
@@ -648,7 +648,7 @@ function ContractorsTab() {
         title={editingContractor ? "Edit Contractor" : "Add Contractor"}
       >
         <div className="space-y-4">
-          <Input label="Name" value={name} onChange={e => setName(e.target.value)} required />
+          <Input label="Name" value={name} onChange={e => setName(e.target.value)} />
           <Input label="Phone" value={phone} onChange={e => setPhone(e.target.value)} />
           <Input label="GST Number" value={gstNumber} onChange={e => setGstNumber(e.target.value)} />
           <Input label="Address" value={address} onChange={e => setAddress(e.target.value)} />

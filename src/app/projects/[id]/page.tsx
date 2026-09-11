@@ -255,7 +255,7 @@ export default function ProjectDetailPage() {
       {/* Phase Modal */}
       <Modal isOpen={isPhaseModalOpen} onClose={() => setIsPhaseModalOpen(false)} title={selectedPhase ? "Edit Phase" : "Add Phase"} size="md">
         <form onSubmit={handlePhaseSubmit} className="space-y-4">
-          <Input label="Phase Name" value={phaseForm.name} onChange={(e) => setPhaseForm({...phaseForm, name: e.target.value})} required />
+          <Input label="Phase Name" value={phaseForm.name} onChange={(e) => setPhaseForm({...phaseForm, name: e.target.value})} />
           <Select label="Status" value={phaseForm.status} onChange={(e) => setPhaseForm({...phaseForm, status: e.target.value})} options={[
             { value: 'pending', label: 'Pending' },
             { value: 'in_progress', label: 'In Progress' },
@@ -274,9 +274,9 @@ export default function ProjectDetailPage() {
       {/* Change Order Modal */}
       <Modal isOpen={isCOModalOpen} onClose={() => setIsCOModalOpen(false)} title="New Change Order">
         <form onSubmit={handleCOSubmit} className="space-y-4">
-          <Input label="Title" value={coForm.title} onChange={(e) => setCoForm({...coForm, title: e.target.value})} required />
-          <TextArea label="Reason" value={coForm.reason} onChange={(e) => setCoForm({...coForm, reason: e.target.value})} required />
-          <Input type="number" label="Additional Cost (₹)" value={coForm.additionalCost} onChange={(e) => setCoForm({...coForm, additionalCost: e.target.value})} required />
+          <Input label="Title" value={coForm.title} onChange={(e) => setCoForm({...coForm, title: e.target.value})} />
+          <TextArea label="Reason" value={coForm.reason} onChange={(e) => setCoForm({...coForm, reason: e.target.value})} />
+          <Input type="number" label="Additional Cost (₹)" value={coForm.additionalCost} onChange={(e) => setCoForm({...coForm, additionalCost: e.target.value})} />
           <Input type="number" label="Additional Days" value={coForm.additionalDays} onChange={(e) => setCoForm({...coForm, additionalDays: e.target.value})} />
           <Select label="Status" value={coForm.status} onChange={(e) => setCoForm({...coForm, status: e.target.value})} options={[
             { value: 'pending', label: 'Pending' },
@@ -302,8 +302,8 @@ export default function ProjectDetailPage() {
             { value: 'design_change', label: 'Design Change' },
             { value: 'other', label: 'Other' },
           ]} />
-          <Input type="date" label="Start Date" value={delayForm.startDate} onChange={(e) => setDelayForm({...delayForm, startDate: e.target.value})} required />
-          <Input type="date" label="End Date" value={delayForm.endDate} onChange={(e) => setDelayForm({...delayForm, endDate: e.target.value})} required />
+          <Input type="date" label="Start Date" value={delayForm.startDate} onChange={(e) => setDelayForm({...delayForm, startDate: e.target.value})} />
+          <Input type="date" label="End Date" value={delayForm.endDate} onChange={(e) => setDelayForm({...delayForm, endDate: e.target.value})} />
           <TextArea label="Description" value={delayForm.description} onChange={(e) => setDelayForm({...delayForm, description: e.target.value})} />
           <div className="flex justify-end gap-2 mt-4">
             <Button variant="secondary" onClick={() => setIsDelayModalOpen(false)} type="button">Cancel</Button>

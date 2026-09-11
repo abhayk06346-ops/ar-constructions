@@ -231,14 +231,14 @@ export default function DocumentsPage() {
             label="Document Name" 
             value={formData.name} 
             onChange={(e) => setFormData({...formData, name: e.target.value})} 
-            required 
+            
           />
           <Select 
             label="Category" 
             value={formData.category} 
             onChange={(e) => setFormData({...formData, category: e.target.value})} 
             options={categories}
-            required
+           
           />
           <Select 
             label="Project (Optional)" 
@@ -255,7 +255,7 @@ export default function DocumentsPage() {
               type="file" 
               onChange={handleFileChange} 
               className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-              required
+             
             />
           </div>
           <TextArea 

@@ -414,14 +414,14 @@ export default function FinancePage() {
               value={txForm.category} 
               onChange={(e: any) => setTxForm({ ...txForm, category: e.target.value })}
               options={[{ value: '', label: 'Select Category' }, ...txCategoryOptions]}
-              required
+             
             />
             <Input 
               label="Date" 
               type="date" 
               value={txForm.date} 
               onChange={(e: any) => setTxForm({ ...txForm, date: e.target.value })}
-              required
+             
             />
             <Input 
               label="Amount (₹)" 
@@ -429,7 +429,7 @@ export default function FinancePage() {
               step="0.01"
               value={txForm.amount} 
               onChange={(e: any) => setTxForm({ ...txForm, amount: e.target.value })}
-              required
+             
             />
             <Input 
               label="GST Amount (₹) if any" 
@@ -469,7 +469,7 @@ export default function FinancePage() {
                 { value: 'upi', label: 'UPI' },
                 { value: 'cheque', label: 'Cheque' }
               ]}
-              required
+             
             />
             <Input 
               label="Reference (Txn ID/Cheque No)" 
@@ -481,7 +481,7 @@ export default function FinancePage() {
             label="Description" 
             value={txForm.description} 
             onChange={(e: any) => setTxForm({ ...txForm, description: e.target.value })}
-            required
+           
           />
           <div className="flex justify-end space-x-2">
             <Button variant="secondary" onClick={() => setIsTxModalOpen(false)}>Cancel</Button>
@@ -504,7 +504,7 @@ export default function FinancePage() {
               value={invoiceForm.clientId} 
               onChange={(e: any) => setInvoiceForm({ ...invoiceForm, clientId: e.target.value })}
               options={[{ value: '', label: 'Select Client' }, ...clientOptions]}
-              required
+             
             />
             <Select 
               label="Project (Optional)" 
@@ -517,14 +517,14 @@ export default function FinancePage() {
               type="date" 
               value={invoiceForm.issueDate} 
               onChange={(e: any) => setInvoiceForm({ ...invoiceForm, issueDate: e.target.value })}
-              required
+             
             />
             <Input 
               label="Due Date" 
               type="date" 
               value={invoiceForm.dueDate} 
               onChange={(e: any) => setInvoiceForm({ ...invoiceForm, dueDate: e.target.value })}
-              required
+             
             />
             <Select 
               label="GST Rate (%)" 
@@ -537,7 +537,7 @@ export default function FinancePage() {
                 { value: '18', label: '18%' },
                 { value: '28', label: '28%' }
               ]}
-              required
+             
             />
           </div>
 
@@ -550,7 +550,7 @@ export default function FinancePage() {
                     label={i === 0 ? "Description" : ""} 
                     value={item.description} 
                     onChange={(e: any) => handleInvoiceItemChange(i, 'description', e.target.value)}
-                    required
+                   
                   />
                 </div>
                 <div className="w-20">
@@ -559,7 +559,7 @@ export default function FinancePage() {
                     type="number" 
                     value={item.quantity} 
                     onChange={(e: any) => handleInvoiceItemChange(i, 'quantity', e.target.value)}
-                    required
+                   
                   />
                 </div>
                 <div className="w-24">
@@ -576,7 +576,7 @@ export default function FinancePage() {
                     step="0.01"
                     value={item.rate} 
                     onChange={(e: any) => handleInvoiceItemChange(i, 'rate', e.target.value)}
-                    required
+                   
                   />
                 </div>
                 <div className="w-24">

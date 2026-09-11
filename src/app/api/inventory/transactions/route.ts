@@ -47,10 +47,10 @@ export async function POST(request: NextRequest) {
           quantity: Number(quantity),
           pricePerUnit: Number(pricePerUnit),
           totalAmount,
-          projectId,
-          vendorId,
+          projectId: projectId && projectId.trim() !== '' ? projectId : null,
+          vendorId: vendorId && vendorId.trim() !== '' ? vendorId : null,
           date: date || new Date().toISOString().split('T')[0],
-          notes
+          notes: notes || null
         }
       });
 

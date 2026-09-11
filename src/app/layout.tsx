@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Sidebar from "@/components/layout/Sidebar";
-import GuidedTour from "@/components/GuidedTour";
+import ClientLayout from "@/components/layout/ClientLayout";
 
 export const metadata: Metadata = {
   title: "AR Constructions - Management System",
@@ -21,13 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-gray-50 min-h-screen antialiased">
-        <Sidebar />
-        <main className="lg:pl-64 pt-16 lg:pt-0 min-h-screen">
-          <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
-            {children}
-          </div>
-        </main>
-        <GuidedTour />
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
