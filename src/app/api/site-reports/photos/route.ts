@@ -29,6 +29,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    
+    if (!body.projectId || body.projectId.trim() === '') {
+      return NextResponse.json({ error: 'Project is required' }, { status: 400 });
+    }
+    
     const item = await prisma.sitePhoto.create({
       data: {
         projectId: body.projectId,
@@ -39,8 +44,8 @@ export async function POST(request: NextRequest) {
       }
     });
     return NextResponse.json(item);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating site photo", error);
-    return NextResponse.json({ error: 'Failed to upload photo' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed to upload photo' }, { status: 500 });
   }
 }

@@ -143,17 +143,40 @@ export default function SiteReportsPage() {
     }
   };
 
+  const compressImage = (base64: string, maxWidth: number = 800): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ratio = Math.min(maxWidth / img.width, maxWidth / img.height, 1);
+        canvas.width = img.width * ratio;
+        canvas.height = img.height * ratio;
+        const ctx = canvas.getContext('2d')!;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg', 0.6));
+      };
+      img.src = base64;
+    });
+  };
+
   const handlePhotoSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!photoForm.projectId) {
+      alert('Please select a project before uploading.');
+      return;
+    }
     if (!photoBase64) {
       alert("Please select a photo");
       return;
     }
     try {
+      // Compress the image before sending
+      const compressed = await compressImage(photoBase64);
+      
       const res = await fetch('/api/site-reports/photos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...photoForm, filePath: photoBase64 }),
+        body: JSON.stringify({ ...photoForm, filePath: compressed }),
       });
       if (res.ok) {
         setIsPhotoModalOpen(false);
@@ -166,9 +189,13 @@ export default function SiteReportsPage() {
         });
         setPhotoBase64('');
         if (fileInputRef.current) fileInputRef.current.value = '';
+      } else {
+        const errorData = await res.json();
+        alert(`Failed to upload photo: ${errorData.error}`);
       }
     } catch (error) {
       console.error('Failed to upload photo', error);
+      alert('Network error while uploading photo.');
     }
   };
 
