@@ -245,6 +245,13 @@ export default function EquipmentPage() {
             }}>Return</Button>
           )}
           <Button size="sm" variant="secondary" onClick={(e) => { e.stopPropagation(); handleOpenModal(eq); }}>Edit</Button>
+          <Button size="sm" variant="danger" onClick={async (e) => {
+            e.stopPropagation();
+            if (window.confirm(`Delete "${eq.name}"?`)) {
+              await fetch(`/api/equipment/${eq.id}`, { method: 'DELETE' });
+              fetchEquipment();
+            }
+          }}>Delete</Button>
         </div>
       )
     }
@@ -359,7 +366,7 @@ export default function EquipmentPage() {
             label="Project" 
             value={assignFormData.projectId} 
             onChange={(e) => setAssignFormData({...assignFormData, projectId: e.target.value})} 
-            options={projects.map(p => ({ value: p.id, label: p.name }))}
+            options={[{ value: '', label: 'Select Project' }, ...projects.map(p => ({ value: p.id, label: p.name }))]}
            
           />
           <Input 

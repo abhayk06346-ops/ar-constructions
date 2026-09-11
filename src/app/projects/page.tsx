@@ -143,6 +143,15 @@ export default function ProjectsPage() {
                     <span>{project._count?.changeOrders || 0} Change Orders</span>
                   </div>
                 </div>
+                <div className="flex gap-2 mt-3 pt-3 border-t">
+                  <Button size="sm" variant="secondary" onClick={() => router.push(`/projects/${project.id}`)}>View</Button>
+                  <Button size="sm" variant="danger" onClick={async () => {
+                    if (window.confirm(`Delete project "${project.name}"? This cannot be undone.`)) {
+                      await fetch(`/api/projects/${project.id}`, { method: 'DELETE' });
+                      fetchProjects();
+                    }
+                  }}>Delete</Button>
+                </div>
               </Card>
             );
           })}

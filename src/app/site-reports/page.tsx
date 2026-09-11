@@ -94,6 +94,12 @@ export default function SiteReportsPage() {
 
   const handleReportSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!reportForm.projectId) {
+      alert('Please select a project before saving the report.');
+      return;
+    }
+    
     try {
       const payload = {
         ...reportForm,
@@ -189,8 +195,8 @@ export default function SiteReportsPage() {
     }
   };
 
-  const projectOptions = projects.map(p => ({ value: p.id, label: p.name }));
-  const filterProjectOptions = [{ value: '', label: 'All Projects' }, ...projectOptions];
+  const projectOptions = [{ value: '', label: 'Select Project' }, ...projects.map(p => ({ value: p.id, label: p.name }))];
+  const filterProjectOptions = [{ value: '', label: 'All Projects' }, ...projects.map(p => ({ value: p.id, label: p.name }))];
   
   const weatherOptions = [
     { value: 'clear', label: '☀️ Clear' },

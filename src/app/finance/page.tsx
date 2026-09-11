@@ -178,9 +178,9 @@ export default function FinancePage() {
     { key: 'gst', label: 'GST' }
   ];
 
-  const projectOptions = projects.map(p => ({ value: p.id, label: p.name }));
-  const clientOptions = clients.map(c => ({ value: c.id, label: c.name }));
-  const vendorOptions = vendors.map(v => ({ value: v.id, label: v.name }));
+  const projectOptions = [{ value: '', label: 'Select Project' }, ...projects.map(p => ({ value: p.id, label: p.name }))];
+  const clientOptions = [{ value: '', label: 'Select Client' }, ...clients.map(c => ({ value: c.id, label: c.name }))];
+  const vendorOptions = [{ value: '', label: 'Select Vendor' }, ...vendors.map(v => ({ value: v.id, label: v.name }))];
   
   const txCategoryOptions = txFormType === 'income' 
     ? [
@@ -330,6 +330,14 @@ export default function FinancePage() {
                 </span>
               )},
               { key: 'paymentMode', label: 'Mode', render: (item: any) => <span className="capitalize">{item.paymentMode.replace('_', ' ')}</span> },
+              { key: 'actions', label: 'Actions', render: (item: any) => (
+                <Button size="sm" variant="danger" onClick={async () => {
+                  if (window.confirm('Delete this transaction?')) {
+                    await fetch(`/api/finance/transactions/${item.id}`, { method: 'DELETE' });
+                    fetchTransactions();
+                  }
+                }}>Delete</Button>
+              )},
             ]}
             data={transactions}
             emptyMessage="No transactions found matching the filters."

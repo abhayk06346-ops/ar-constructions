@@ -197,6 +197,13 @@ export default function InventoryPage() {
           });
           setIsMaterialModalOpen(true);
         }}>Edit</Button>
+        <Button size="sm" variant="danger" onClick={async (e) => {
+          e.stopPropagation();
+          if (window.confirm(`Delete "${item.name}"? This will also remove all stock transactions for this material.`)) {
+            await fetch(`/api/inventory/${item.id}`, { method: 'DELETE' });
+            fetchData();
+          }
+        }}>Delete</Button>
       </div>
     )}
   ];

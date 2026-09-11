@@ -64,9 +64,9 @@ export async function POST(request: NextRequest) {
         paymentMode: body.paymentMode || 'bank_transfer',
         reference: body.reference,
         date: body.date,
-        projectId: body.projectId || null,
-        vendorId: body.vendorId || null,
-        clientId: body.clientId || null
+        projectId: body.projectId && body.projectId.trim() !== '' ? body.projectId : null,
+        vendorId: body.vendorId && body.vendorId.trim() !== '' ? body.vendorId : null,
+        clientId: body.clientId && body.clientId.trim() !== '' ? body.clientId : null
       }
     });
     return NextResponse.json(transaction);
